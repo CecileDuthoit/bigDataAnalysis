@@ -1,17 +1,18 @@
-# parser CSV
-filmsData <- read.csv("/home/cecile/Documents/INSA/Big Data/Analysis/bigDataAnalysis/tournagesdefilmsparis2011.csv", sep=";")
+################ PROJECT ######################
+# Import of the CSV file
+films_paris = read.csv("/Users/eier/Documents/INSA/5eme ann??e/BigData/tournagesdefilmsparis2011.csv", sep=";")
 
-# install ggplot2
-install.packages("ggplot2")
-require(ggplot2) 
+# Finding the number of films by each director
+films_paris$number = 1 # Adding value to sumarize by 
+director=ddply(films_paris,"realisateur",summarize,numberFilms=sum(number))
 
-# require ddply
-library(plyr)
+# Finding the top 15 directors (ranged by the number of films)
+mostFilms=arrange(director, -numberFilms)[1:15,]
+ggplot(director,aes(x=realisateur,y=numberFilms)) + geom_histogram(stat="identity")
+ggplot(mostFilms,aes(x=realisateur,y=numberFilms)) + geom_histogram(stat="identity")
 
-head(filmsData)
-# display values per type (~per column)
-str(filmsData)
-# display all column names
-names(filmsData)
-# display infos about each column (length, type of entry, etc.)
-summary(filmsData)
+# Finding the year when the number of films where the highest
+films_paris$year = as.Date(as.character(films_paris$date_debut_evenement), format="%Y")
+films_paris$year=format(films_paris$year, '%Y') # Creating a value that contains the year and not the date.
+year=ddply(films_paris, "year", summarize, numFilmsPerYear=sum(number))
+ggplot(year,aes(x=year,y=numFilmsPerYear)) + geom_histogram(stat="identity")
