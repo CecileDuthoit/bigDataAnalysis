@@ -1,7 +1,7 @@
 ################ PROJECT ######################
 
 # Import of the CSV file
-films_paris = read.csv("/home/cecile/Documents/INSA/Big Data/Analysis/bigDataAnalysis/tournagesdefilmsparis2011.csv", sep=";")
+films_paris = read.csv("/Users/eier/Documents/INSA/5eme ann??e/BigData/Project/bigDataAnalysis/tournagesdefilmsparis2011.csv", sep=";")
 
 # install ggplot2
 install.packages("ggplot2")
@@ -28,7 +28,6 @@ ggplot(director,aes(x=realisateur,y=numberFilms)) + geom_histogram(stat="identit
 ggplot(mostFilms,aes(x=realisateur,y=numberFilms)) + geom_histogram(stat="identity")
 
 # Finding the year when the number of films where the highest
-films_paris$year = as.Date(as.character(films_paris$date_debut_evenement), format="%Y")
-films_paris$year=format(films_paris$year, '%Y') # Creating a value that contains the year and not the date.
+films_paris$year = format(as.Date(as.character(films_paris$date_debut_evenement)),'%Y') # Creating a value that contains the year and not the date.
 year=ddply(films_paris, "year", summarize, numFilmsPerYear=sum(number))
 ggplot(year,aes(x=year,y=numFilmsPerYear)) + geom_histogram(stat="identity")
