@@ -1,7 +1,7 @@
 ################ PROJECT ######################
 
 # Import of the CSV file
-films_paris = read.csv("/Users/eier/Documents/INSA/5eme ann??e/BigData/Project/bigDataAnalysis/tournagesdefilmsparis2011.csv", sep=";")
+films_paris = read.csv("/home/cecile/Documents/INSA/Big Data/Analysis/bigDataAnalysis/tournagesdefilmsparis2011.csv", sep=";")
 
 # install ggplot2
 install.packages("ggplot2")
@@ -20,14 +20,20 @@ summary(films_paris)
 
 # Finding the number of films by each director
 films_paris$number = 1 # Adding value to sumarize by 
-director=ddply(films_paris,"realisateur",summarize,numberFilms=sum(number))
+director=ddply(films_paris,"realisateur",summarize,"Number of films by director"=sum(number))
+allFilmsByDirector = ggplot(director,aes(x=realisateur,y=`Number of films by director`)) + geom_histogram(stat="identity")
+allFilmsByDirector + labs(x = "Directors")
 
-# Finding the top 15 directors (ranged by the number of films)
-mostFilms=arrange(director, -numberFilms)[1:15,]
-ggplot(director,aes(x=realisateur,y=numberFilms)) + geom_histogram(stat="identity")
-ggplot(mostFilms,aes(x=realisateur,y=numberFilms)) + geom_histogram(stat="identity")
+# Finding the top 5 directors (ranged by the number of films)
+mostFilms=arrange(director, -`Number of films by director`)[1:5,]
+top5directors = ggplot(mostFilms,aes(x=realisateur,y=`Number of films by director`)) + geom_histogram(stat="identity")
+top5directors + labs(x = "Directors")
 
 # Finding the year when the number of films where the highest
-films_paris$year = format(as.Date(as.character(films_paris$date_debut_evenement)),'%Y') # Creating a value that contains the year and not the date.
-year=ddply(films_paris, "year", summarize, numFilmsPerYear=sum(number))
-ggplot(year,aes(x=year,y=numFilmsPerYear)) + geom_histogram(stat="identity")
+films_paris$year_beginning = format(as.Date(as.character(films_paris$date_debut_evenement)),'%Y') # Creating a value that contains the year and not the date.
+films_paris$year_end = format(as.Date(as.character(films_paris$date_fin_evenement)),'%Y') # Creating a value that contains the year and not the date.
+year=ddply(films_paris, "year", summarize, "Number of films per year"=sum(number))
+ggplot(year,aes(x=year,y=`Number of films per year`)) + geom_histogram(stat="identity")
+
+
+
