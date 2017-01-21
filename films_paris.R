@@ -35,5 +35,31 @@ films_paris$year_end = format(as.Date(as.character(films_paris$date_fin_evenemen
 year=ddply(films_paris, "year", summarize, "Number of films per year"=sum(number))
 ggplot(year,aes(x=year,y=`Number of films per year`)) + geom_histogram(stat="identity")
 
+# Finding the number of films per district
+films_paris$number = 1 # Adding value to sumarize by 
+shotDistricts_per_placeType = ddply(films_paris,c("arrondissement", "cadre"),summarize,"Number of films per place"=sum(number))
+shotDistrictsPlot = ggplot(shotDistricts_per_placeType,aes(x=arrondissement,y=`Number of films per place`, fill=cadre)) + geom_histogram(stat="identity", position = "dodge") 
+shotDistrictsPlot + labs(x = "Districts")
 
+# Finding the top 15 districts 
+mostDistricts = arrange(shotDistricts_per_placeType, -`Number of films per place`)[1:10,]
+top5shotDistricts = ggplot(mostDistricts,aes(x=arrondissement,y=`Number of films per place`, fill=cadre)) + geom_histogram(stat="identity", position = "dodge") 
+top5shotDistricts + labs(x = "Districts")
+
+# Finding the number of films whose contain the most scene shot in different Parisian places
+films_paris$number = 1 # Adding value to sumarize by 
+nbScene = ddply(films_paris,c("titre", "cadre"),summarize,"Number of diffently-located scene per film"=sum(number))
+nbScenePlot = ggplot(nbScene,aes(x=titre,y=`Number of diffently-located scene per film`,fill=cadre)) 
+nbScenePlot + labs(x = "Films")
+
+# Finding the top 5 above
+mostScene = arrange(nbScene, -`Number of diffently-located scene per film`)[1:5,]
+top5mostScene = ggplot(mostScene,aes(x=titre,y=`Number of diffently-located scene per film`, fill=cadre)) + geom_histogram(stat="identity", position = "dodge") 
+top5mostScene + labs(x = "Films")
+
+# Finding the number of films shot outdoor and in public space
+films_paris$number = 1 # Adding value to sumarize by 
+placeType = ddply(films_paris,"cadre",summarize,"Number of films per type of place"=sum(number))
+placeTypePlot = ggplot(placeType,aes(x=cadre,y=`Number of films per type of place`)) 
+placeTypePlot + labs(x = "Types of place")
 
