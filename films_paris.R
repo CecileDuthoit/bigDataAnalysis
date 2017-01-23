@@ -2,6 +2,7 @@
 
 # Import of the CSV file
 films_paris = read.csv("/home/cecile/Documents/INSA/Big Data/Analysis/bigDataAnalysis/tournagesdefilmsparis2011.csv", sep=";")
+films_paris = read.csv("/Users/eier/Documents/INSA/5eme ann??e/BigData/Project/bigDataAnalysistournagesdefilmsparis2011.csv", sep=";")
 
 # install ggplot2
 install.packages("ggplot2")

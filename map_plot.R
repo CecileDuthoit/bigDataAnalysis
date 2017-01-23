@@ -11,4 +11,4 @@ mpP <- mpP+ geom_point(aes(x=2.29324, y=48.857198) ,color="red", size=3) # The e
 mpP <- mpP+ geom_point(aes(x=2.349292, y=48.85267) ,color="red", size=3) # Cathedrale Notre Dame
 mpP <- mpP+ geom_point(aes(x=2.335422, y=48.848858) ,color="red", size=3) # Jardin du Luxembourg
 mpP + labs(x="Paris")
-mpP
+mpP + labs(x = "Coordonnes long") + labs(y = "Coordonnes lat") + theme(axis.title.x = element_text(size = rel(2))) + theme(axis.title.y = element_text(size = rel(2))) + theme(axis.text = element_text(size = rel(1.5)))
