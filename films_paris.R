@@ -18,48 +18,33 @@ names(films_paris)
 # display infos about each column (length, type of entry, etc.)
 summary(films_paris)
 
-# Finding the number of films by each director
+# Finding top 5 directors
 films_paris$number = 1 # Adding value to sumarize by 
 director=ddply(films_paris,"realisateur",summarize,"Number of films by director"=sum(number))
-allFilmsByDirector = ggplot(director,aes(x=realisateur,y=`Number of films by director`)) + geom_histogram(stat="identity")
-allFilmsByDirector + labs(x = "Directors")
-
-# Finding the top 5 directors (ranged by the number of films)
 mostFilms=arrange(director, -`Number of films by director`)[1:5,]
 top5directors = ggplot(mostFilms,aes(x=realisateur,y=`Number of films by director`)) + geom_histogram(stat="identity")
-top5directors + labs(x = "Directors")
+top5directors = top5directors + labs(x = "Directors")
+top5directors + theme(axis.title.x = element_text(size = rel(2))) + theme(axis.title.y = element_text(size = rel(2))) + theme(axis.text = element_text(size = rel(1)))
 
 # Finding the year when the number of films where the highest
-films_paris$year_beginning = format(as.Date(as.character(films_paris$date_debut_evenement)),'%Y') # Creating a value that contains the year and not the date.
-films_paris$year_end = format(as.Date(as.character(films_paris$date_fin_evenement)),'%Y') # Creating a value that contains the year and not the date.
-year=ddply(films_paris, "year", summarize, "Number of films per year"=sum(number))
-ggplot(year,aes(x=year,y=`Number of films per year`)) + geom_histogram(stat="identity")
+films_paris$year = as.Date(as.character(films_paris$date_debut_evenement), format='%Y') # Creating a value that contains the year and not the date.
+films_paris$year = format(films_paris$date_debut_evenement, '%Y')
+year = ddply(films_paris, "year", summarize, "Number of films per year"=sum(number))
+years = ggplot(year,aes(x=year,y=`Number of films per year`)) + geom_histogram(stat="identity")
+years + labs(x = "Year") + labs(y = "Number of films") + theme(axis.title.x = element_text(size = rel(2))) + theme(axis.title.y = element_text(size = rel(2))) + theme(axis.text = element_text(size = rel(1)))
 
-# Finding the number of films per district
+# Finding the top 15 districts
 films_paris$number = 1 # Adding value to sumarize by 
-shotDistricts_per_placeType = ddply(films_paris,c("arrondissement", "cadre"),summarize,"Number of films per place"=sum(number))
-shotDistrictsPlot = ggplot(shotDistricts_per_placeType,aes(x=arrondissement,y=`Number of films per place`, fill=cadre)) + geom_histogram(stat="identity", position = "dodge") 
-shotDistrictsPlot + labs(x = "Districts")
+shotDistricts_per_placeType = ddply(films_paris,c("arrondissement", "cadre"),summarize,"Number of films per district"=sum(number))
+mostDistricts = arrange(shotDistricts_per_placeType, -`Number of films per district`)[1:10,]
+top5shotDistricts = ggplot(mostDistricts,aes(x=arrondissement,y=`Number of films per district`)) + geom_histogram(stat="identity", position = "dodge") 
+top5shotDistricts + labs(x = "Districts") + theme(axis.title.x = element_text(size = rel(2))) + theme(axis.title.y = element_text(size = rel(2))) + theme(axis.text = element_text(size = rel(1)))
 
-# Finding the top 15 districts 
-mostDistricts = arrange(shotDistricts_per_placeType, -`Number of films per place`)[1:10,]
-top5shotDistricts = ggplot(mostDistricts,aes(x=arrondissement,y=`Number of films per place`, fill=cadre)) + geom_histogram(stat="identity", position = "dodge") 
-top5shotDistricts + labs(x = "Districts")
+# Import of an "home-made" CSV file about the number of nights reserved in Paris 
+tourism_paris = read.csv("/home/cecile/Documents/INSA/Big Data/Analysis/bigDataAnalysis/tourism_evolution.csv", sep=";")
 
-# Finding the number of films whose contain the most scene shot in different Parisian places
-films_paris$number = 1 # Adding value to sumarize by 
-nbScene = ddply(films_paris,c("titre", "cadre"),summarize,"Number of diffently-located scene per film"=sum(number))
-nbScenePlot = ggplot(nbScene,aes(x=titre,y=`Number of diffently-located scene per film`,fill=cadre)) 
-nbScenePlot + labs(x = "Films")
-
-# Finding the top 5 above
-mostScene = arrange(nbScene, -`Number of diffently-located scene per film`)[1:5,]
-top5mostScene = ggplot(mostScene,aes(x=titre,y=`Number of diffently-located scene per film`, fill=cadre)) + geom_histogram(stat="identity", position = "dodge") 
-top5mostScene + labs(x = "Films")
-
-# Finding the number of films shot outdoor and in public space
-films_paris$number = 1 # Adding value to sumarize by 
-placeType = ddply(films_paris,"cadre",summarize,"Number of films per type of place"=sum(number))
-placeTypePlot = ggplot(placeType,aes(x=cadre,y=`Number of films per type of place`)) 
-placeTypePlot + labs(x = "Types of place")
-
+# Plot the evolution of tourism in Paris
+tourism_paris$tmp = as.Date(as.character(tourism_paris$Year), format='%Y')
+tourism_paris$tmp = format(tourism_paris$tmp, '%Y')
+evolution = ggplot(tourism_paris,aes(x=tmp,y=nights)) 
+evolution + labs(x = "Year") + labs(y = "Millions of reserved nights") + theme(axis.title.x = element_text(size = rel(2))) + theme(axis.title.y = element_text(size = rel(2))) + theme(axis.text = element_text(size = rel(1)))
