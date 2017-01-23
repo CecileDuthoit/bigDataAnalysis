@@ -1,3 +1,11 @@
+# Import of the CSV file
+films_paris = read.csv("/home/cecile/Documents/INSA/Big Data/Analysis/bigDataAnalysis/tournagesdefilmsparis2011.csv", sep=";")
+
+# install ggplot2
+install.packages("ggplot2")
+require(ggplot2) 
+require(maps)
+
 mapParis <- borders("france","paris", colour="gray50", fill="gray50")
 mpP <- ggplot() + mapParis
 mpP <- mpP+ geom_point(aes(x=2.352987, y=48.891305) ,color="blue", size=3) # 75018

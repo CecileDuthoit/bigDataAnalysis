@@ -2,7 +2,6 @@
 
 # Import of the CSV file
 films_paris = read.csv("/home/cecile/Documents/INSA/Big Data/Analysis/bigDataAnalysis/tournagesdefilmsparis2011.csv", sep=";")
-films_paris = read.csv("/Users/eier/Documents/INSA/5eme ann??e/BigData/Project/bigDataAnalysistournagesdefilmsparis2011.csv", sep=";")
 
 # install ggplot2
 install.packages("ggplot2")
@@ -47,7 +46,7 @@ tourism_paris = read.csv("/home/cecile/Documents/INSA/Big Data/Analysis/bigDataA
 # Plot the evolution of tourism in Paris
 tourism_paris$tmp = as.Date(as.character(tourism_paris$Year), format='%Y')
 tourism_paris$tmp = format(tourism_paris$tmp, '%Y')
-evolution = ggplot(tourism_paris,aes(x=tmp,y=nights)) 
+evolution = ggplot(tourism_paris,aes(x=tmp,y=nights)) + geom_histogram(stat="identity", position = "dodge")
 evolution + labs(x = "Year") + labs(y = "Millions of reserved nights") + theme(axis.title.x = element_text(size = rel(2))) + theme(axis.title.y = element_text(size = rel(2))) + theme(axis.text = element_text(size = rel(1.5)))
 
 
