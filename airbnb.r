@@ -22,8 +22,8 @@ ggplot() + mapParis +
   theme(axis.ticks.y = element_blank(),axis.text.y = element_blank(), 
         axis.ticks.x = element_blank(),axis.text.x = element_blank(), 
         plot.title = element_text(lineheight=.8, face="bold", vjust=1))+ 
+  geom_point(aes(x=long, y=lat, color=count, size=count), colour="gray", shape=21, stroke=2, data=data, alpha=1) +
   geom_point(aes(x=long, y=lat, color=count, size=count), data=data, alpha=1) +
   geom_text(aes(x=long, y=lat, label=Neighbourhood),data=data, hjust=0.5, vjust=0) +
   scale_size_continuous(range = c(5, 50), guide="none") +
-  scale_colour_gradientn("Number of\nReservations", colours=c( "#ffff00","#ff0000"))+ 
-  coord_equal(ratio=1) 
+  scale_colour_gradientn("Number of\nReservations", colours=c( "#ffff00","#ff0000"))
