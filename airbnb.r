@@ -16,11 +16,9 @@ create_airbnb <- function() {
 }
 
 data = create_airbnb()
-
 mapParis <- borders("france","paris", colour="gray50", fill="white")
-
 ggplot() + mapParis + 
-  labs(x="", y="", title="Top 10 Districts")+ #labels
+  labs(x="", y="", title="Number of airbnb reservations (2013-2016)")+ #labels
   theme(axis.ticks.y = element_blank(),axis.text.y = element_blank(), 
         axis.ticks.x = element_blank(),axis.text.x = element_blank(), 
         plot.title = element_text(lineheight=.8, face="bold", vjust=1))+ 
@@ -29,5 +27,3 @@ ggplot() + mapParis +
   scale_size_continuous(range = c(5, 50), guide="none") +
   scale_colour_gradientn("Number of\nReservations", colours=c( "#ffff00","#ff0000"))+ 
   coord_equal(ratio=1) 
-
-create_airbnb()
